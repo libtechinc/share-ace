@@ -6,5 +6,5 @@ Ace Editor bindings for ShareJS >= 0.7.x.
 
 ```javascript
 var editor = ace.edit(elemid);
-shareDoc.attach(editor);
+shareDoc.attachAceEditor(editor.getSession());
 ```
