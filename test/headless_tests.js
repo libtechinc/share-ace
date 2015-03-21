@@ -1,71 +1,63 @@
 // Create a browser environment for CodeMirror
-var jsdom = require("jsdom");
-document = jsdom.jsdom('<html><body><textarea id="editor"></textarea></body></html>');
+var jsdom = require("jsdom").jsdom;
+document = jsdom('<html><body><div id="editor"></div></body></html>');
 window = document.parentWindow;
-navigator = {};
-// Add some missing stuff in jsdom that CodeMirror wants
-jsdom.dom.level3.html.HTMLElement.prototype.createTextRange = function () {
-  return {
-    moveToElementText: function () {
-    },
-    collapse: function () {
-    },
-    moveEnd: function () {
-    },
-    moveStart: function () {
-    },
-    getBoundingClientRect: function () {
-      return {};
-    }
-  };
-};
 
-var CodeMirror = require('codemirror');
 var share = require('share');
-var shareCodeMirror = require('..');
+var shareAce = require('..');
 var assert = require('assert');
 
-function newCm(ctx) {
-  var cm = CodeMirror.fromTextArea(document.getElementById('editor'));
-  shareCodeMirror(cm, ctx);
-  return cm;
+
+require("../ace-builds/src-noconflict/ace.js");
+var ace = window.ace;
+
+
+function newEditor(ctx) {
+  var editor = ace.edit('editor');
+  editor.$blockScrolling = Infinity
+  var EditSession = ace.require('ace/edit_session').EditSession;
+  var session = new EditSession('');
+  editor.setSession(session);
+  
+  shareAce(session, ctx);
+  return session;
 }
 
-describe('CodeMirror creation', function () {
+describe('Editor creation', function () {
   it('sets context text in editor', function () {
     var ctx = new Ctx('hi');
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
-    assert.equal('hi', cm.getValue());
+    assert.equal('hi', editor.getValue());
   });
 });
 
-describe('CodeMirror edits', function () {
+describe('Editor edits', function () {
   it('adds text', function () {
     var ctx = new Ctx('');
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
     var text = "aaaa\nbbbb\ncccc\ndddd";
-    cm.setValue(text);
+    editor.setValue(text);
     assert.equal(text, ctx.get());
   });
 
   it('adds empty text', function () {
     var ctx = new Ctx('');
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
-    cm.setValue('');
+    editor.setValue('');
     assert.equal('', ctx.get() || '');
 
-    cm.setValue('a');
+    editor.setValue('a');
     assert.equal('a', ctx.get() || '');
   });
 
   it('replaces a couple of lines', function () {
     var ctx = new Ctx('three\nblind\nmice\nsee\nhow\nthey\nrun\n');
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
-    cm.replaceRange('evil\nrats\n', {line: 1, ch: 0}, {line: 3, ch: 0});
+    editor.replace({start: {row: 1, column: 0}, end: {row: 3, column: 0} }, 'evil\nrats\n');
     assert.equal('three\nevil\nrats\nsee\nhow\nthey\nrun\n', ctx.get());
   });
 });
@@ -73,40 +65,40 @@ describe('CodeMirror edits', function () {
 describe('ShareJS changes', function () {
   it('adds text', function () {
     var ctx = new Ctx('', true);
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
     var text = "aaaa\nbbbb\ncccc\ndddd";
     ctx.insert(0, text);
-    assert.equal(text, cm.getValue());
+    assert.equal(text, editor.getValue());
   });
 
   it('can edit a doc that has been empty', function () {
     var ctx = new Ctx('', true);
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
     ctx.insert(0, '');
-    assert.equal('', cm.getValue());
+    assert.equal('', editor.getValue());
 
     ctx.insert(0, 'a');
-    assert.equal('a', cm.getValue());
+    assert.equal('a', editor.getValue());
   });
 
   it('replaces a line', function () {
     var ctx = new Ctx('hi', true);
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
     ctx.remove(0, 2);
     ctx.insert(0, 'hello');
-    assert.equal('hello', cm.getValue());
+    assert.equal('hello', editor.getValue());
   });
 
   it('replaces a couple of lines', function () {
     var ctx = new Ctx('three\nblind\nmice\nsee\nhow\nthey\nrun\n', true);
-    var cm = newCm(ctx);
+    var editor = newEditor(ctx);
 
     ctx.remove(6, 11);
     ctx.insert(6, 'evil\nrats\n');
-    assert.equal('three\nevil\nrats\nsee\nhow\nthey\nrun\n', cm.getValue());
+    assert.equal('three\nevil\nrats\nsee\nhow\nthey\nrun\n', editor.getValue());
   });
 });
 

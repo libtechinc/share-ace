@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/codemirror.css">
-<script src="/codemirror.js"></script>
+<style>
+  .ace_editor {
+    width: 600px;
+    height: 300px;
+  }
+</style>
 <script src="/channel/bcsocket.js"></script>
 <script src="/share.uncompressed.js"></script>
-<script src="/share-codemirror.js"></script>
+<script src="/share-ace.js"></script>
+<script src='/ace-builds/src-noconflict/ace.js'></script>
+<script src='/ace-builds/src-noconflict/ext-modelist.js'></script>
 </head>
 <body>
-<textarea id="pad">Connecting...</textarea>
+<div id="pad">Connecting...</div>
 <button id="monkey">Infinite Monkey</button>
 <script>
-var elem = document.getElementById('pad');
-var cm = CodeMirror.fromTextArea(elem, {
-  mode: "text/plain"
-});
+
+var editor = ace.edit('pad');
+editor.$blockScrolling = Infinity;
 
 var s = new BCSocket(null, {reconnect: true});
 var sjs = new window.sharejs.Connection(s);
-var doc = sjs.get('users', 'sephx');
+var doc = sjs.get('users', 'test');
 
 doc.subscribe();
 doc.whenReady(function () {
   if (!doc.type) doc.create('text');
   if (doc.type && doc.type.name === 'text') {
-    doc.attachCodeMirror(cm);
+    doc.attachAceEditor(editor.getSession());
   }
 });
 
 document.getElementById('monkey').onclick = function() {
-  setInterval(monkeyType, 50);
+  setInterval(monkeyType, 500);
 };
 
+
 function monkeyType() {
-  var textLength = cm.getValue().length;
+  var textLength = editor.getValue().length;
   var pos = Math.floor(Math.random()*textLength);
-  var from = cm.posFromIndex(pos);
+  var from = editor.getSession().getDocument().indexToPosition(pos);
   var editLength = randomInt(10)
   if(Math.random() < 0.9) {
     // Add text
     var text =  randomString(editLength);
-    cm.replaceRange(text, cm.posFromIndex(pos));
+    editor.getSession().insert(editor.getSession().getDocument().indexToPosition(pos), text);
   } else {
     var endIndex = Math.max(pos + editLength, textLength-1);
-    var to = cm.posFromIndex(endIndex);
-    cm.replaceRange('', from, to);
+    var to = editor.getSession().getDocument().indexToPosition(endIndex);
+    editor.getSession().remove({start: from, end: to });
   }
 }
 

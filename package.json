@@ -1,32 +1,31 @@
 {
-  "name": "share-codemirror",
+  "name": "share-ace",
   "version": "0.1.0",
-  "description": "CodeMirror bindings for ShareJS",
-  "main": "share-codemirror.js",
+  "description": "Ace Editor bindings for ShareJS",
+  "main": "share-ace.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/share/share-codemirror.git"
+    "url": "git://github.com/mixxen/share-ace.git"
   },
   "keywords": [
-    "codemirror",
+    "ace",
     "sharejs"
   ],
-  "author": "Aslak Hellesøy",
+  "author": "Alex Cabello",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/share/share-codemirror/issues"
+    "url": "https://github.com/mixxen/share-ace/issues"
   },
   "devDependencies": {
     "browserchannel": "^2.0.0",
-    "codemirror": "^4.8.0",
     "express": "^4.10.3",
     "istanbul": "^0.3.2",
-    "jsdom": "0.8.8",
-    "livedb": "^0.4.9",
+    "jsdom": "3.1.2",
+    "livedb": "^0.5.7",
     "mocha": "^2.0.1",
-    "share": "^0.7.3"
+    "share": "^0.7.25"
   }
 }

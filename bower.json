@@ -1,7 +1,7 @@
 {
-  "name": "share-codemirror",
+  "name": "share-ace",
   "version": "0.1.0",
-  "main": "share-codemirror.js",
+  "main": "share-ace.js",
   "ignore": [
     "node_modules"
   ]
