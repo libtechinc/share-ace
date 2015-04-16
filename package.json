@@ -2,7 +2,7 @@
   "name": "share-ace",
   "version": "0.1.0",
   "description": "Ace Editor bindings for ShareJS",
-  "main": "share-ace.js",
+  "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"
   },

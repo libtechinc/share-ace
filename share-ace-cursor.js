@@ -40,7 +40,7 @@
     // *** remote -> local changes
     var Range = ace.require('ace/range').Range;
     ctx.onCursor = function(msg) {
-      console.log('blah:', msg)
+      //console.log('onSelection:', msg)
       var r = msg.p.row;
       var c = msg.p.column;
       var u = msg.u;
@@ -55,11 +55,11 @@
       if(r >= 0 && c >= 0)
         users[u].cursor = editor.addMarker(new Range(r,c,r,c+1),"ace-cursor-"+users[u].n%8, "text", false);
         
-      console.log('cursor event' + nusers);
+      //console.log('cursor event' + nusers);
     }
     
     ctx.onSelection = function(msg) {
-      console.log('blah:', msg)
+      //console.log('onSelection:', msg)
       var sr = msg.p.start.row;
       var er = msg.p.end.row;
       var sc = msg.p.start.column;
@@ -76,7 +76,7 @@
       if(sr >= 0 && sc >= 0)
         users[u].select = editor.addMarker(new Range(sr,sc,er,ec),"ace-select-"+users[u].n%8, "select-text", false);
         
-      console.log('selection event' + nusers);
+      //console.log('selection event' + nusers);
     }    
     
     
@@ -85,7 +85,7 @@
     var sel = editor.selection;
     sel.on('changeCursor', function() {
       
-      console.log(JSON.stringify(sel.getCursor()))
+      //console.log('changeCursor:', JSON.stringify(sel.getCursor()))
       
       doc.connection.socket.send({
         a: 'cursor',
@@ -138,7 +138,7 @@
 
         switch (msg.a) {
           case 'cursor':
-            console.log('got cursor event:', msg);
+            //console.log('got cursor event:', msg);
             var contexts = this.editingContexts;
             for (var i = 0; i < contexts.length; i++) {
               var c = contexts[i];
@@ -146,7 +146,7 @@
             }
             break;
           case 'selection':
-            console.log('got selection event:', msg);
+            //console.log('got selection event:', msg);
             var contexts = this.editingContexts;
             for (var i = 0; i < contexts.length; i++) {
               var c = contexts[i];
