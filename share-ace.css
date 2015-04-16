@@ -1,0 +1,24 @@
+.ace-select-0 {position:absolute;background:#ff9999;z-index:5}
+.ace-cursor-0 {position:absolute;background:#ff3333;z-index:6;width:2px!important}
+.ace-cursor-0::after {position:absolute;background:#ff3333;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-1 {position:absolute;background:#feff9b;z-index:5}
+.ace-cursor-1 {position:absolute;background:#fdff35;z-index:6;width:2px!important}
+.ace-cursor-1::after {position:absolute;background:#fdff35;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-2 {position:absolute;background:#96ff98;z-index:5}
+.ace-cursor-2 {position:absolute;background:#30ff33;z-index:6;width:2px!important}
+.ace-cursor-2::after {position:absolute;background:#30ff33;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-3 {position:absolute;background:#96ffcd;z-index:5}
+.ace-cursor-3 {position:absolute;background:#31fe9d;z-index:6;width:2px!important}
+.ace-cursor-3::after {position:absolute;background:#31fe9d;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-4 {position:absolute;background:#9afdff;z-index:5}
+.ace-cursor-4 {position:absolute;background:#34faff;z-index:6;width:2px!important}
+.ace-cursor-4::after {position:absolute;background:#34faff;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-5 {position:absolute;background:#9897ff;z-index:5}
+.ace-cursor-5 {position:absolute;background:#3331ff;z-index:6;width:2px!important}
+.ace-cursor-5::after {position:absolute;background:#3331ff;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-6 {position:absolute;background:#ff99fd;z-index:5}
+.ace-cursor-6 {position:absolute;background:#ff33fc;z-index:6;width:2px!important}
+.ace-cursor-6::after {position:absolute;background:#ff33fc;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}
+.ace-select-7 {position:absolute;background:#ff99cb;z-index:5}
+.ace-cursor-7 {position:absolute;background:#ff3398;z-index:6;width:2px!important}
+.ace-cursor-7::after {position:absolute;background:#ff3398;z-index:6;top:-4px;content:' ';left:-3px;font-family:Arial;padding:1px 2px;width:4px;height:4px}

@@ -5,7 +5,7 @@
    * @param editor - Ace Session instance
    * @param ctx - Share context
    */
-  function shareAceEditor(editor, ctx) {
+  function shareAceEditor(editor, ctx, doc) {
     if (!ctx.provides.text) throw new Error('Cannot attach to non-text document');
 
     var suppress = false;
@@ -42,6 +42,43 @@
 
 
     // *** remote -> local changes
+/*    
+    var cursors = {};
+    var selections = {};
+    
+    var Range = ace.require('ace/range').Range;
+    ctx.onCursor = function(msg) {
+      console.log('blah:', msg)
+      var r = msg.p.row;
+      var c = msg.p.column;
+      var u = msg.u;
+      
+      if(cursors[u])
+        editor.removeMarker(cursors[u]);
+      
+      if(r >= 0 && c >= 0)
+        cursors[u] = editor.addMarker(new Range(r,c,r,c+1),"bar", "text", false);
+        
+      console.log(cursors[u])
+    }
+    
+    ctx.onSelection = function(msg) {
+      console.log('blah:', msg)
+      var sr = msg.p.start.row;
+      var er = msg.p.end.row;
+      var sc = msg.p.start.column;
+      var ec = msg.p.end.column;
+      var u = msg.u;
+      
+      if(selections[u])
+        editor.removeMarker(selections[u]);
+      
+      if(sr >= 0 && sc >= 0)
+        selections[u] = editor.addMarker(new Range(sr,sc,er,ec),"foo", "text", false);
+        
+      console.log(selections[u])
+    }    
+*/    
     
     ctx.onInsert = function (pos, text) {
       suppress = true
@@ -63,7 +100,33 @@
     };
 
     // *** local -> remote changes
+/*    
+    var sel = editor.selection;
+    sel.on('changeCursor', function() {
+      
+      console.log(JSON.stringify(sel.getCursor()))
+      
+      doc.connection.socket.send({
+        a: 'cursor',
+        d: doc.name,
+        c: doc.collection,
+        p: sel.getCursor()
+      });
+      
+    });
+    
+    sel.on('changeSelection', function() {
 
+      doc.connection.socket.send({
+        a: 'selection',
+        d: doc.name,
+        c: doc.collection,
+        p: sel.getRange()
+      });
+
+      
+    });
+*/
     editor.on('change', onLocalChange);
 
     function onLocalChange(change) {
@@ -143,8 +206,41 @@
       // Browser, no AMD
       window.sharejs.Doc.prototype.attachAceEditor = function (editor, ctx) {
         if (!ctx) ctx = this.createContext();
-        shareAceEditor(editor, ctx);
+        shareAceEditor(editor, ctx, this);
       };
+/*      
+      // overwrite the sharejs _onMessage function to include our cursor methods
+      // this will break if _onMessage inteface changes or is removed
+      window.sharejs.Doc.prototype._onMessageOrig = window.sharejs.Doc.prototype._onMessage;
+      window.sharejs.Doc.prototype._onMessage = function(msg) {
+        if (!(msg.c === this.collection && msg.d === this.name)) {
+          // This should never happen - its a sanity check for bugs in the connection code.
+          throw new Error('Got message for wrong document. ' + this.collection + ' ' + this.name);
+        }
+
+        switch (msg.a) {
+          case 'cursor':
+            console.log('got cursor event:', msg);
+            var contexts = this.editingContexts;
+            for (var i = 0; i < contexts.length; i++) {
+              var c = contexts[i];
+              if (c.onCursor) c.onCursor(msg);
+            }
+            break;
+          case 'selection':
+            console.log('got selection event:', msg);
+            var contexts = this.editingContexts;
+            for (var i = 0; i < contexts.length; i++) {
+              var c = contexts[i];
+              if (c.onSelection) c.onSelection(msg);
+            }
+            break;
+          default:
+            this._onMessageOrig(msg);
+            break;          
+        }
+      }
+*/      
     }
   }
 })();

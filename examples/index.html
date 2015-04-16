@@ -6,10 +6,42 @@
     width: 600px;
     height: 300px;
   }
+  
+  .ace-related-code-highlight {
+    background-color: yellow;
+    position:absolute;
+  } 
+  
+  .foo {
+    position:absolute;
+    background:rgba(200,200,255,1);
+    z-index:5;
+  }
+  
+  .bar{
+    position:absolute;
+    background:rgba(150,150,225,1);
+    z-index:40; width:2px!important
+  }
+  
+  .bar::after {
+    position: absolute;
+    background: rgba(150,150,225,1);
+    z-index: 40;
+    top: -4px;
+    content: ' ';
+    left: -3px;
+    font-family: Arial;
+    padding: 1px 2px;
+    width: 4px;
+    height: 4px;
+  }
 </style>
+<link rel="stylesheet" type="text/css" href="/share-ace.css">
 <script src="/channel/bcsocket.js"></script>
 <script src="/share.uncompressed.js"></script>
 <script src="/share-ace.js"></script>
+<script src="/share-ace-cursor.js"></script>
 <script src='/ace-builds/src-noconflict/ace.js'></script>
 <script src='/ace-builds/src-noconflict/ext-modelist.js'></script>
 </head>
@@ -21,15 +53,36 @@
 var editor = ace.edit('pad');
 editor.$blockScrolling = Infinity;
 
+// var sel = editor.selection;
+
+// sel.on('changeCursor', function() {
+  
+//   console.log(JSON.stringify(sel.getCursor()))
+  
+//   s.send({
+//     a: 'cursor',
+//     d: 
+//     p: sel.getCursor()
+//   });
+// })
+
 var s = new BCSocket(null, {reconnect: true});
 var sjs = new window.sharejs.Connection(s);
-var doc = sjs.get('users', 'test');
+var doc = sjs.get('collection', 'doc');
+
+var cursors = {};
+// var sjsmessagehandler = s.onmessage;
+// s.onmessage = function(message) {
+// console.log('got message' + JSON.stringify(message));
+// sjsmessagehandler(message).bind(sjs);
+// };
 
 doc.subscribe();
 doc.whenReady(function () {
   if (!doc.type) doc.create('text');
   if (doc.type && doc.type.name === 'text') {
     doc.attachAceEditor(editor.getSession());
+    doc.attachAceEditorCursor(editor.getSession());
   }
 });
 
