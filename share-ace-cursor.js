@@ -2,8 +2,19 @@
   'use strict';
 
   /**
+   * This is a simplified implementation for cursor tracking. Cursor and selection
+   * changes are emitted by the client and no transformations are done. The server
+   * does not store client cursor data and just acts as a relay.
+   * 
+   * There will be synchronization issues (i.e. cursor lags behind update) during
+   * typing since this is not integrated with the sharejs ops. When updates stop,
+   * cursors should sychronize correctly.
+   * 
+   * Cursor CSS is stored in share-ace.css. 
+   * 
    * @param editor - Ace Session instance
    * @param ctx - Share context
+   * @param doc - Share doc
    */
   function shareAceEditorCursor(editor, ctx, doc) {
     if (!ctx.provides.text) throw new Error('Cannot attach to non-text document');
@@ -13,13 +24,10 @@
 
 
     doc.connection.on('disconnected', function(e) {
-      console.log('got disconnected con event:', e)
-      
       for(var u in users) {
         editor.removeMarker(users[u].cursor);
         editor.removeMarker(users[u].select);
       }
-      
       users = {};
       nusers = 0;
     });
@@ -66,7 +74,7 @@
       }
         
       if(sr >= 0 && sc >= 0)
-        users[u].select = editor.addMarker(new Range(sr,sc,er,ec),"ace-select-"+users[u].n%8, "text", false);
+        users[u].select = editor.addMarker(new Range(sr,sc,er,ec),"ace-select-"+users[u].n%8, "select-text", false);
         
       console.log('selection event' + nusers);
     }    

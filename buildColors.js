@@ -11,8 +11,8 @@ cg.forEach(function(o,n) {
   if(n % 2 === 1)
     return;
   
-  var scolor = tinycolor(o).lighten(30).toString();
-  var ccolor = tinycolor(o).lighten(10).toString();
+  var scolor = tinycolor(o).darken(30).toString();
+  var ccolor = tinycolor(o).darken(10).toString();
   
   
   var foo = {
