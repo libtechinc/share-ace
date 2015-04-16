@@ -4,7 +4,7 @@ document = jsdom('<html><body><div id="editor"></div></body></html>');
 window = document.parentWindow;
 
 var share = require('share');
-var shareAce = require('..');
+var shareAce = require('..').client;
 var assert = require('assert');
 
 

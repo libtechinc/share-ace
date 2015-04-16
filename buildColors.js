@@ -34,7 +34,6 @@ cg.forEach(function(o,n) {
     'z-index': 6,
     'top': '-4px',
     'content': "' '",
-    'left': '-3px',
     'font-family': 'Arial',
     'padding': '1px 2px',
     'width': '4px',
